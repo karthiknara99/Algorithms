@@ -10,8 +10,8 @@ public class Problem {
         if( p < r )
         {
             q = partition( a, p, r );
-            quickSort(a, p, q-1);
-            quickSort(a, q+1, r);
+            quickSort( a, p, q-1 );
+            quickSort( a, q+1, r );
         }
     }
     
