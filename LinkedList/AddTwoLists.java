@@ -1,5 +1,5 @@
 //Arithmetic add of two linked list whose sum is bound by the number of digits
-//i.e sum of two 3 digit number is also a 3 digit number
+//for eg: sum of two 3 digit number is also a 3 digit number
 
 import java.util.Stack;
 
