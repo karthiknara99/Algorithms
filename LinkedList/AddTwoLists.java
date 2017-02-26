@@ -1,5 +1,4 @@
-//Arithmetic add of two linked list whose sum is bound by the number of digits
-//for eg: sum of two 3 digit number is also a 3 digit number
+//Arithmetic add of two linked list
 
 import java.util.Stack;
 
@@ -47,6 +46,12 @@ public class Problem {
             }
             carry = sum / 10;
         }
+		if( carry > 0 )
+		{
+			Node newNode = new Node( carry );
+			newNode.next = head;
+			head = newNode;
+		}
         return head;
     }
     
