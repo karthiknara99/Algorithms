@@ -29,9 +29,11 @@ public class Problem {
             System.out.println("Position invalid!! Can't Insert!!");
             return;
         }
-        if( head == null )
+        if( pos == 1 )
         {
-            head = new Node( data );
+            Node newNode = new Node( data );
+            newNode.next = head;
+            head = newNode;
             length++;
         }
         else
