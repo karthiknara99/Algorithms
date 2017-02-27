@@ -28,46 +28,40 @@ class Node
 public class Problem {
     
     static Node head;
-    static int length;
     
-    public void insertList( int data, int pos )
+    public boolean insertList( int data, int pos )
     {
-        if( pos > length + 1 )
-        {
-            System.out.println("Position invalid!! Can't Insert!!");
-            return;
-        }
         if( pos == 1 )
         {
             Node newNode = new Node( data );
             newNode.next = head;
             head = newNode;
-            length++;
         }
         else
         {
             int i;
             Node newNode, temp = head;
             for( i = 1; i < pos - 1; i++ )
+            {
+                if( temp.next == null )
+                    return false;
                 temp = temp.next;
+            }
             newNode = new Node( data );
             newNode.next = temp.next;
             temp.next = newNode;
-            length++;
         }
+        return true;
     }
     
-    public void deleteList( int data )
+    public boolean deleteList( int data )
     {
         if( head == null )
-        {
-            System.out.println("Linked List Empty!! Can't Delete!!");
-            return;
-        }
+            return false;
         if( head.data == data )
         {
             head = head.next;
-            return;
+            return true;
         }
         Node temp, delNode;
         for( temp = head; temp.next != null; temp = temp.next )
@@ -75,10 +69,10 @@ public class Problem {
             if( temp.next.data == data )
             {
                 temp.next = temp.next.next;
-                return;
+                return true;
             }
         }
-        System.out.println("Element Not Found!!");
+        return false;
     }
     
     public int searchList( int data )
@@ -227,16 +221,18 @@ public class Problem {
         boolean check = false;
         
         //Insert Check
-        list.insertList( 11 , 1 );
-        list.insertList( 22 , 2 );
-        list.insertList( 44 , 3 );
-        list.insertList( 33 , 3 );
-        list.insertList( 55 , 5 );
-        list.insertList( 66 , 6 );
-        list.insertList( 77 , 7 );
-        list.insertList( 22 , 8 );
-        list.insertList( 22 , 4 );
-        list.insertList( 44 , 2 );
+        check = list.insertList( 11 , 1 );
+        check = list.insertList( 22 , 2 );
+        check = list.insertList( 44 , 3 );
+        check = list.insertList( 33 , 3 );
+        check = list.insertList( 55 , 5 );
+        check = list.insertList( 66 , 6 );
+        check = list.insertList( 77 , 7 );
+        check = list.insertList( 22 , 8 );
+        check = list.insertList( 22 , 4 );
+        check = list.insertList( 44 , 2 );
+        if( check == false )
+            System.out.println("Position invalid!! Can't Insert!!");
         list.printList();
         
         /*//Check Cycle
@@ -281,9 +277,11 @@ public class Problem {
         list.printList();
         
         //Delete Check
-        list.deleteList( 22 );
-        list.deleteList( 44 );
-        list.deleteList( 11 );
+        check = list.deleteList( 22 );
+        check = list.deleteList( 44 );
+        check = list.deleteList( 11 );
+        if( check == false )
+            System.out.println("Position invalid!! Can't Delete!!");
         list.printList();
     }
 }
