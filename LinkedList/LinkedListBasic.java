@@ -1,26 +1,32 @@
+
+import java.util.HashSet;
+
 /*Linked List
 1. Insert
 2. Delete
 3. Search
 4. Reverse
-5. Print
+5. Check Cycle
+6. Delete Duplicates in a sorted list
+7. Delete Duplicates in an unsorted list
+8. Print
 */
+
+class Node
+{
+    int data;
+    Node next;
+
+    Node( int data ){
+        this.data = data;
+        this.next = null;
+    }
+}
 
 public class Problem {
     
     static Node head;
     static int length;
-    
-    static class Node
-    {
-        int data;
-        Node next;
-        
-        Node( int data ){
-            this.data = data;
-            this.next = null;
-        }
-    }
     
     public void insertList( int data, int pos )
     {
@@ -109,6 +115,55 @@ public class Problem {
         return head;
     }
     
+    public boolean checkCycle( Node head )
+    {
+        Node fast, slow;
+        try
+        {
+            for( fast = head.next, slow = head; fast != null; fast = fast.next.next, slow = slow.next )
+            {
+                if( fast == slow )
+                    return true;
+            }
+        }
+        catch( NullPointerException e )
+        {
+            return false;
+        }
+        return false;
+    }
+    
+    public Node deleteDuplicates( Node head )
+    {
+        Node temp = head;
+        while( temp.next != null )
+        {
+            if( temp.data == temp.next.data )
+                temp.next = temp.next.next;
+            else
+                temp = temp.next;
+        }
+        return head;
+    }
+    
+    public Node deleteDuplicatesUnordered( Node head )
+    {
+        HashSet<Integer> set = new HashSet<>();
+        Node curr = head, prev = null;
+        while( curr != null )
+        {
+            if( set.add(curr.data) == false )
+            {
+                curr = curr.next;
+                prev.next = curr;
+                continue;
+            }
+            prev = curr;
+            curr = curr.next;
+        }
+        return head;
+    }
+    
     public void printList()
     {
         Node temp;
@@ -119,6 +174,7 @@ public class Problem {
     
     public static void main(String[] args) {
         Problem list = new Problem();
+        boolean check = false;
         
         //Insert Check
         list.insertList( 11 , 1 );
@@ -128,17 +184,35 @@ public class Problem {
         list.insertList( 55 , 5 );
         list.insertList( 66 , 6 );
         list.insertList( 77 , 7 );
+        list.insertList( 22 , 8 );
+        list.insertList( 22 , 4 );
+        list.insertList( 44 , 2 );
         list.printList();
         
-        //Delete Check
-        list.deleteList( 77 );
-        list.deleteList( 33 );
-        list.deleteList( 11 );
-        list.printList();
+        /*//Check Cycle
+        head = new Node( 11 );
+        head.next = new Node( 22 );
+        head.next.next = new Node( 33 );
+        Node temp = head.next.next.next = new Node( 44 );
+        head.next.next.next.next = new Node( 55 );
+        head.next.next.next.next.next = temp;
+        check = list.checkCycle(head);
+        System.out.println( check );
+        */
         
         //Search Check
         Node searchNode;
         searchNode = list.searchList( 44 );
+
+        //Delete Duplicates
+        head = list.deleteDuplicatesUnordered(head);
+        list.printList();
+        
+        //Delete Check
+        list.deleteList( 22 );
+        list.deleteList( 44 );
+        list.deleteList( 11 );
+        list.printList();
         
         //Reverse Check
         head = list.reverseList(head);

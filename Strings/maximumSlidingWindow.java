@@ -8,7 +8,7 @@ public class Problem {
         int i, k = 3;
         ArrayDeque<Integer> d = new ArrayDeque<>();
         int a[] = { 3, 1, -1, -3, 5, 3, 6, 7 };
-        int[] o = new int[a.length-2];
+        int[] o = new int[a.length-k+1];
         for( i = 0; i < k-1; i++ )
         {
             while( !d.isEmpty() && a[i] > d.peekLast() )
