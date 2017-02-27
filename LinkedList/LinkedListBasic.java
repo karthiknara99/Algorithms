@@ -3,12 +3,13 @@
 2. Delete
 3. Search
 4. Reverse
-5. Remove nth node from the end
-6. Check Cycle
-7. Delete Duplicates in a sorted list
-8. Delete Duplicates in an unsorted list
-9. Swap pairs
-10. Print
+5. Reverse List from i to j
+6. Remove nth node from the end
+7. Check Cycle
+8. Delete Duplicates in a sorted list
+9. Delete Duplicates in an unsorted list
+10. Swap pairs
+11. Print
 */
 
 import java.util.HashSet;
@@ -106,6 +107,32 @@ public class Problem {
             curr = next;
         }
         head = prev;
+        return head;
+    }
+    
+    public Node reverseListPos( Node head, int start, int end )
+    {
+        Node next;
+        Node curr = head;
+        for( int i = 1; i < start-1; i++ )
+            curr = curr.next;
+        Node super_prev = curr;
+        if( start != 1 )
+            curr = curr.next;
+        Node super_curr = curr;
+        Node prev = null;
+        for( int i = start; i <= end; i++ ) 
+        {
+            next = curr.next;
+            curr.next = prev;
+            prev = curr;
+            curr = next;
+        }
+        super_curr.next = curr;
+        if( head == super_prev )
+            head = prev;
+        else
+            super_prev.next = prev;
         return head;
     }
     
@@ -243,14 +270,20 @@ public class Problem {
         head = list.swapPairs(head);
         list.printList();
         
+        //Reverse Check
+        System.out.println("Reverse List: ");
+        head = list.reverseList(head);
+        list.printList();
+        
+        //Reverse Specific Position
+        System.out.println("Reverse List between positions: ");
+        head = list.reverseListPos(head,1,5);
+        list.printList();
+        
         //Delete Check
         list.deleteList( 22 );
         list.deleteList( 44 );
         list.deleteList( 11 );
-        list.printList();
-        
-        //Reverse Check
-        head = list.reverseList(head);
         list.printList();
     }
 }
