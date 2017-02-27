@@ -1,16 +1,17 @@
-
-import java.util.HashSet;
-
 /*Linked List
 1. Insert
 2. Delete
 3. Search
 4. Reverse
-5. Check Cycle
-6. Delete Duplicates in a sorted list
-7. Delete Duplicates in an unsorted list
-8. Print
+5. Remove nth node from the end
+6. Check Cycle
+7. Delete Duplicates in a sorted list
+8. Delete Duplicates in an unsorted list
+9. Swap pairs
+10. Print
 */
+
+import java.util.HashSet;
 
 class Node
 {
@@ -79,25 +80,18 @@ public class Problem {
         System.out.println("Element Not Found!!");
     }
     
-    public Node searchList( int data )
+    public int searchList( int data )
     {
         if( head == null )
-        {
-            System.out.println("List Empty!!");
-            return null;
-        }
+            return -1;
         Node temp;
         int i;
         for( temp = head, i = 1; temp != null; temp = temp.next, i++ )
         {
             if( temp.data == data )
-            {
-                System.out.println("Element " + data + " Found at Position: " + i );
-                return temp;
-            }
+                return i;
         }
-        System.out.println("Element Not Found!!");
-        return null;
+        return -1;
     }
     
     public Node reverseList( Node head )
@@ -114,6 +108,16 @@ public class Problem {
         head = prev;
         return head;
     }
+    
+    public Node removeNthNode( Node head, int n )
+    {
+        Node slow, fast = head;
+        for( int i = 0; i < n; i++ )
+            fast = fast.next;
+        for( slow = head; fast.next != null; fast = fast.next, slow = slow.next );
+        slow.next = slow.next.next;
+        return head;
+    } 
     
     public boolean checkCycle( Node head )
     {
@@ -164,6 +168,25 @@ public class Problem {
         return head;
     }
     
+    public Node swapPairs( Node head )
+    {
+        Node curr = head, prev = null;
+        Node next;
+        while( curr != null && curr.next != null )
+        {
+            next = curr.next;
+            if( curr == head )
+                head = next;
+            curr.next = next.next;
+            next.next = curr;
+            if( prev != null )
+                prev.next = next;
+            prev = curr;
+            curr = curr.next;
+        }
+        return head;
+    }
+    
     public void printList()
     {
         Node temp;
@@ -201,11 +224,23 @@ public class Problem {
         */
         
         //Search Check
-        Node searchNode;
-        searchNode = list.searchList( 44 );
+        int searchPos;
+        searchPos = list.searchList( 44 );
+        System.out.println("Element 44 Found at Position: " + searchPos );
 
         //Delete Duplicates
         head = list.deleteDuplicatesUnordered(head);
+        System.out.println("Deleted duplicates: ");
+        list.printList();
+        
+        //Remove nth node from the end
+        head = list.removeNthNode(head,3);
+        System.out.println("Removed 3rd node from last: ");
+        list.printList();
+        
+        //Swap Pairs
+        System.out.println("Swap Pairs: ");
+        head = list.swapPairs(head);
         list.printList();
         
         //Delete Check
