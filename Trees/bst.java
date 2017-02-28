@@ -3,8 +3,15 @@
 2. Delete
 3. Find minimum element
 4. Search with and without recursion
-5. Height of a tree
-6. Print - preorder, inorder and postorder
+5. Max and Min Height of a tree
+6. Count number of nodes in a tree
+7. Level Order of a tree
+8. Sum of Level Order of a tree 
+9. Check equality of two trees
+10. Lowest Common Ancestor with and without recursion
+11. Depth of a node from a given node
+12. Shortest path length between two nodes
+13. Print - preorder, inorder and postorder
 */
 
 import java.util.ArrayList;
@@ -130,6 +137,13 @@ public class Problem {
         return 1 + Math.min( MinHeightTree(ptr.left), MinHeightTree(ptr.right) );
     }
     
+    public int numNodes( Node ptr )
+    {
+        if( ptr == null )
+            return 0;
+        return ( 1 + numNodes( ptr.left ) + numNodes( ptr.right ) );
+    }
+    
     public ArrayList<ArrayList<Integer>> levelOrderTree( Node ptr )
     {
         ArrayList<ArrayList<Integer>> list = new ArrayList<>();
@@ -155,6 +169,31 @@ public class Problem {
         return list;
     }
     
+    public ArrayList<Integer> sumLevelOrderTree( Node ptr )
+    {
+        ArrayList<Integer> list = new ArrayList<>();
+        if( ptr == null )
+            return list;
+        Queue<Node> q = new LinkedList<>();
+        q.add(ptr);
+        while( !q.isEmpty() )
+        {
+            int loopsize = q.size();
+            int loopsum = 0;
+            for( int i = 0; i < loopsize; i++ )
+            {
+                Node curr = q.poll();
+                loopsum += curr.data;
+                if( curr.left != null )
+                    q.add( curr.left );
+                if( curr.right != null )
+                    q.add( curr.right );
+            }
+            list.add( loopsum );
+        }
+        return list;
+    }
+    
     public boolean treeEquality( Node ptr1, Node ptr2 )
     {
         if( ptr1 == null && ptr2 == null )
@@ -164,6 +203,57 @@ public class Problem {
         if( ptr1.data == ptr2.data )
             return treeEquality( ptr1.left, ptr2.left ) & treeEquality( ptr1.right, ptr2.right );
         return false;
+    }
+    
+    public Node lowestCommonAncestorRec( Node ptr, int n1, int n2 )
+    {
+        if( ptr == null )
+            return ptr;
+        if( ptr.data == n1 || ptr.data == n2 )
+            return ptr;
+        
+        Node left_lca = lowestCommonAncestorRec( ptr.left, n1, n2 );
+        Node right_lca = lowestCommonAncestorRec( ptr.right, n1, n2 );
+        
+        if( left_lca != null && right_lca != null )
+            return ptr;
+        return ( left_lca != null ) ? left_lca : right_lca;
+    }
+    
+    public Node lowestCommonAncestorIt( Node ptr, int n1, int n2 )
+    {
+        while( ptr != null )
+        {
+            if( ptr.data < n1 && ptr.data < n2 )
+                ptr = ptr.right;
+            else if( ptr.data > n1 && ptr.data > n2 )
+                ptr = ptr.left;
+            else
+                return ptr;
+        }
+        return ptr;
+    }
+    
+    //Assuming Both Nodes Exist
+    public int depthOfNodeFromNode( Node ptr, int data )
+    {
+        if( ptr == null )
+            return -999;
+        if( ptr.data == data )
+            return 0;
+        else if( data >= ptr.data )
+            return 1 + depthOfNodeFromNode( ptr.right, data );
+        else
+            return 1 + depthOfNodeFromNode( ptr.left, data );
+    }
+    
+    //Assuming Both Nodes Exist
+    public int shortestPathLengthBetweenNodes( Node ptr, int n1, int n2 )
+    {
+        Node lca = lowestCommonAncestorRec(ptr, n1, n2);
+        int d1 = depthOfNodeFromNode(lca, n1);
+        int d2 = depthOfNodeFromNode(lca, n2);
+        return d1 + d2;
     }
     
     public void printInOrderTree( Node ptr )
@@ -230,16 +320,36 @@ public class Problem {
         else
             System.out.println("Not Found!!");
         
+        //Number of Nodes in a tree
+        System.out.println( "Number of Nodes in the tree : " + tree.numNodes(root) );
+        
         //Level Order of a tree
         ArrayList<ArrayList<Integer>> list = tree.levelOrderTree(root);
         System.out.println("Level Order: ");
         System.out.println(list);
+        
+        //Sum Level Order of a tree
+        ArrayList<Integer> sumList = tree.sumLevelOrderTree(root);
+        System.out.println("Sum Level Order: ");
+        System.out.println(sumList);
         
         //Equality of two trees
         System.out.println("Tree Equality: ");
         System.out.println( tree.treeEquality(root, root) );
         System.out.println("Tree Equality: ");
         System.out.println( tree.treeEquality(root, root.left) );
+        
+        //Lowest Common Ancestor
+        System.out.println("Lowest Common Ancestor: ");
+        System.out.println( tree.lowestCommonAncestorRec( root, 30, 40 ).data );
+        System.out.println("Lowest Common Ancestor: ");
+        System.out.println( tree.lowestCommonAncestorRec( root, 30, 70 ).data );
+        
+        //Shortest Path Length Between Nodes
+        System.out.println("Shortest Path Length Between Nodes: ");
+        System.out.println( tree.shortestPathLengthBetweenNodes(root, 30, 40 ) );
+        System.out.println("Shortest Path Length Between Nodes: ");
+        System.out.println( tree.shortestPathLengthBetweenNodes(root, 30, 70 ) );
         
         //Delete
         root = tree.deleteTree( root, 20 );
