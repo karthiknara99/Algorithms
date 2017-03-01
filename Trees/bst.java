@@ -1,17 +1,19 @@
 /* Trees
 1. Insert with and without recursion
-2. Delete
-3. Find minimum element
-4. Search with and without recursion
-5. Max and Min Height of a tree
-6. Count number of nodes in a tree
-7. Level Order of a tree
-8. Sum of Level Order of a tree 
-9. Check equality of two trees
-10. Lowest Common Ancestor with and without recursion
-11. Depth of a node from a given node
-12. Shortest path length between two nodes
-13. Print - preorder, inorder and postorder
+2. Sorted Array to BST
+3. Delete
+4. Find minimum element
+5. Search with and without recursion
+6. Max and Min Height of a tree
+7. Count number of nodes in a tree
+8. Level Order of a tree
+9. Sum of Level Order of a tree 
+10. Check equality of two trees
+11. Lowest Common Ancestor with and without recursion
+12. Depth of a node from a given node
+13. Shortest path length between two nodes
+14. Path Sum from root to leaf and node to node
+15. Print - preorder, inorder and postorder
 */
 
 import java.util.ArrayList;
@@ -66,6 +68,17 @@ public class Problem {
             prev.right = newNode;
         else
             prev.left = newNode;
+    }
+    
+    Node sortedArrayToBST( int a[], int start, int end )
+    {
+        if (start > end)
+            return null;
+        int mid = (start + end) / 2;
+        Node ptr = new Node( a[mid] );
+        ptr.left = sortedArrayToBST( a, start, mid - 1 );
+        ptr.right = sortedArrayToBST( a, mid + 1, end );
+        return ptr;
     }
     
     public Node deleteTree( Node ptr, int data )
@@ -256,6 +269,25 @@ public class Problem {
         return d1 + d2;
     }
     
+    public boolean pathSumFromRoottoLeaf( Node ptr, int sum )
+    {
+        if( ptr == null || sum < 0 )
+            return false;
+        if( sum - ptr.data == 0 && ptr.left == null && ptr.right == null )
+            return true;
+        return pathSumFromRoottoLeaf( ptr.left, sum - ptr.data ) || pathSumFromRoottoLeaf( ptr.right, sum - ptr.data );
+    }
+    
+    public boolean pathSumFromAnyNode( Node ptr, int sum )
+    {
+        if( ptr == null || sum < 0 )
+            return false;
+        if( sum - ptr.data == 0 )
+            return true;
+        return pathSumFromAnyNode( ptr.left, sum - ptr.data ) || pathSumFromAnyNode( ptr.right, sum - ptr.data ) ||
+               pathSumFromAnyNode( ptr.left, sum ) || pathSumFromAnyNode( ptr.right, sum );
+    }
+    
     public void printInOrderTree( Node ptr )
     {
         if( ptr == null )
@@ -350,6 +382,14 @@ public class Problem {
         System.out.println( tree.shortestPathLengthBetweenNodes(root, 30, 40 ) );
         System.out.println("Shortest Path Length Between Nodes: ");
         System.out.println( tree.shortestPathLengthBetweenNodes(root, 30, 70 ) );
+        
+        //Path Sum from root
+        System.out.println("Path Sum: ");
+        System.out.println( tree.pathSumFromRoottoLeaf(root, 180) );
+        
+        //Path Sum from any node
+        System.out.println("Path Sum: ");
+        System.out.println( tree.pathSumFromAnyNode(root, 130) );
         
         //Delete
         root = tree.deleteTree( root, 20 );
